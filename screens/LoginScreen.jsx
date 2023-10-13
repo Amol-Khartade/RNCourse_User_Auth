@@ -8,6 +8,7 @@ import { AuthContext } from '../store/auth-contex'
 
 function LoginScreen() {
 	const [isAuthenticating, setIsAuthenticating] = useState(false)
+
 	const authCtx = useContext(AuthContext)
 
 	async function loginHandler({ email, password }) {
@@ -17,17 +18,19 @@ function LoginScreen() {
 			authCtx.authenticate(token)
 		} catch (error) {
 			Alert.alert(
-				'Authentication Error !',
-				'Could not login you in. Please check your credentials & try again'
+				'Authentication failed!',
+				'Could not log you in. Please check your credentials or try again later!'
 			)
+			console.log(error)
+			setIsAuthenticating(false)
 		}
-		setIsAuthenticating(false)
 	}
 
 	if (isAuthenticating) {
 		return <LoadingOverlay message="Logging you in..." />
 	}
-	return <AuthContent isLogin={true} onAuthenticate={loginHandler} />
+
+	return <AuthContent isLogin onAuthenticate={loginHandler} />
 }
 
 export default LoginScreen
